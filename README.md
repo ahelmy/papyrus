@@ -25,7 +25,7 @@ A material prepared in ancient Egypt from the pithy stem of a water plant, used 
 
 ## Installation
 ```bash
-docker run -p 8000:8000 papyrus:latest
+docker run -p 8000:8000 ahelmy0/papyrus:latest
 ```
 
 ## Usage
