@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "papyrus"
+version = "0.1.0"
+description = ""
+authors = ["Ali Helmy <alymohamad@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.112.1"
+uvicorn = "^0.30.6"
+jinja2 = "^3.1.4"
+python-docx = "^1.1.2"
+openpyxl = "^3.1.5"
+xhtml2pdf = "^0.2.16"
+python-multipart = "^0.0.9"
+pydantic = "^2.8.2"
+docx2pdf = "^0.1.8"
+mammoth = "^1.8.0"
+pypandoc-binary = "^1.13"
+docxtpl = "^0.18.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

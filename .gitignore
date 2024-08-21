@@ -1,0 +1,4 @@
+.idea
+venv
+app/templates
+app/outputs
