@@ -27,6 +27,7 @@ async def upload_template(file: UploadFile = File(...)):
 async def render_template_endpoint(template: RenderTemplateRequest):
     try:
         rendered_file = render_template(template.template_id, template.data, template.format)
-        return FileResponse(rendered_file, media_type='application/octet-stream')
+        return FileResponse(str(rendered_file), media_type='application/octet-stream',
+                            headers={'filename': rendered_file.name})
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

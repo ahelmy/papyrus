@@ -12,7 +12,7 @@ TEMPLATES_DIR = Path("app/templates")
 OUTPUT_DIR = Path("app/outputs")
 
 
-def render_template(template_id: str, data: dict, format: str) -> str:
+def render_template(template_id: str, data: dict, format: str) -> Path:
     template_path = TEMPLATES_DIR / template_id
     output_file = OUTPUT_DIR / f"{uuid.uuid4()}.{format}"
 
@@ -23,7 +23,8 @@ def render_template(template_id: str, data: dict, format: str) -> str:
     conversion_key = f'{template_extension}_{format}'
     # Render based on format
     if conversion_key in CONVERSION_MATRIX:
-        return CONVERSION_MATRIX[conversion_key](template_path, data, output_file)
+        CONVERSION_MATRIX[conversion_key](template_path, data, output_file)
+        return output_file
     else:
         raise ValueError("Unsupported format")
 
@@ -35,14 +36,12 @@ def html_to_html(template_path, data, output_file):
     if output_file:
         with open(output_file, 'w') as file:
             file.write(rendered_content)
-    return output_file
 
 
 def docx_to_docx(template_path, data, output_file):
     doc = DocxTemplate(template_path)
     doc.render(data)
     doc.save(output_file)
-    return output_file
 
 
 def render_xlsx(template_path, data, output_file):
@@ -56,7 +55,6 @@ def render_xlsx(template_path, data, output_file):
                     if f'{{{{{key}}}}}' in cell.value:
                         cell.value = cell.value.replace(f'{{{{{key}}}}}', str(value))
     wb.save(output_file)
-    return str(output_file)
 
 
 def docx_to_pdf(template_path, data, output_file: Path):
@@ -90,17 +88,15 @@ def docx_to_pdf(template_path, data, output_file: Path):
     err = convert_to_pdf_by_libreoffice(infilters, docx_path)
     if err:
         raise ValueError(err)
-    return str(output_file)
 
 
 def html_to_pdf(template_path, data, output_file):
     html_path = output_file.with_suffix('.html')
     html_to_html(template_path, data, html_path)
-    with open(output_file, 'w+b') as file:
-        err = convert_to_pdf_by_libreoffice(['--infilter="HTML Document"', '--infilter="MediaWiki"'], html_path)
-        if err:
-            raise ValueError(err)
-    return str(output_file)
+
+    err = convert_to_pdf_by_libreoffice(['--infilter="HTML Document"', '--infilter="MediaWiki"'], html_path)
+    if err:
+        raise ValueError(err)
 
 
 def convert_to_pdf_by_libreoffice(infilters, source_path) -> str | None:

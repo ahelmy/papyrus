@@ -12,7 +12,7 @@ RUN . /opt/bin/activate &&  poetry install --no-dev --no-root
 # Stage 2: Final stage
 FROM python:${PYTHON_VERSION}-alpine
 # Install LibreOffice & Common Fonts
-RUN apk --no-cache add bash libreoffice util-linux \
+RUN apk --no-cache add bash libreoffice util-linux openjdk11 \
   font-droid-nonlatin font-droid ttf-dejavu ttf-freefont ttf-liberation && \
   rm -rf /var/cache/apk/*
 
