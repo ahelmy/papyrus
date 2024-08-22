@@ -4,3 +4,4 @@
 venv
 app/templates
 app/outputs
+__pycache__
