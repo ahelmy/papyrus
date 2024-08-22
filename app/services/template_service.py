@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import subprocess
 import uuid
 
 from jinja2 import Template
@@ -5,7 +8,6 @@ from pathlib import Path
 from docxtpl import DocxTemplate
 from openpyxl import Workbook
 from xhtml2pdf import pisa
-import pypandoc
 
 TEMPLATES_DIR = Path("app/templates")
 OUTPUT_DIR = Path("app/outputs")
@@ -27,21 +29,21 @@ def render_template(template_id: str, data: dict, format: str) -> str:
         raise ValueError("Unsupported format")
 
 
-def html_to_html(template_path, data, output_file=None):
+def html_to_html(template_path, data, output_file):
     with open(template_path, 'r') as file:
         template = Template(file.read())
     rendered_content = template.render(**data)
     if output_file:
         with open(output_file, 'w') as file:
             file.write(rendered_content)
-    return rendered_content
+    return output_file
 
 
 def docx_to_docx(template_path, data, output_file):
     doc = DocxTemplate(template_path)
     doc.render(data)
     doc.save(output_file)
-    return str(output_file)
+    return output_file
 
 
 def render_xlsx(template_path, data, output_file):
@@ -62,15 +64,54 @@ def docx_to_pdf(template_path, data, output_file: Path):
     filename = output_file.with_suffix('')
     docx_path = filename.with_suffix('.docx')
     docx_to_docx(template_path, data, docx_path)
-    pypandoc.convert_file(docx_path, 'latex', outputfile=output_file)
+    infilters = [
+        '--infilter="Microsoft Word 2007/2010/2013 XML"',
+        '--infilter="Microsoft Word 2007-2013 XML"',
+        '--infilter="Microsoft Word 2007-2013 XML Template"',
+        '--infilter="Microsoft Word 95 Template"',
+        '--infilter="MS Word 95 Vorlage"',
+        '--infilter="Microsoft Word 97/2000/XP Template"',
+        '--infilter="MS Word 97 Vorlage"',
+        '--infilter="Microsoft Word 2003 XML"',
+        '--infilter="MS Word 2003 XML"',
+        '--infilter="Microsoft Word 2007 XML Template"',
+        '--infilter="MS Word 2007 XML Template"',
+        '--infilter="Microsoft Word 6.0"',
+        '--infilter="MS WinWord 6.0"',
+        '--infilter="Microsoft Word 95"',
+        '--infilter="MS Word 95"',
+        '--infilter="Microsoft Word 97/2000/XP"',
+        '--infilter="MS Word 97"',
+        '--infilter="Microsoft Word 2007 XML"',
+        '--infilter="MS Word 2007 XML"',
+        '--infilter="Microsoft WinWord 5"',
+        '--infilter="MS WinWord 5"'
+    ]
+
+    err = convert_to_pdf_by_libreoffice(infilters, docx_path)
+    if err:
+        raise ValueError(err)
     return str(output_file)
 
 
 def html_to_pdf(template_path, data, output_file):
-    html_content = html_to_html(template_path, data, None)
+    html_path = output_file.with_suffix('.html')
+    html_to_html(template_path, data, html_path)
     with open(output_file, 'w+b') as file:
-        pisa.CreatePDF(html_content, dest=file)
+        err = convert_to_pdf_by_libreoffice(['--infilter="HTML Document"', '--infilter="MediaWiki"'], html_path)
+        if err:
+            raise ValueError(err)
     return str(output_file)
+
+
+def convert_to_pdf_by_libreoffice(infilters, source_path) -> str | None:
+    cmd = ['soffice', '--headless']
+    cmd.extend(infilters)
+    cmd.extend(['--convert-to', 'pdf:writer_pdf_Export', '--outdir', OUTPUT_DIR, source_path])
+    result = subprocess.run(cmd)
+    if result.returncode != 0:
+        return "Failed to convert to PDF"
+    return None
 
 
 CONVERSION_MATRIX = {

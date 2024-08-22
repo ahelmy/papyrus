@@ -6,7 +6,7 @@ authors = ["Ali Helmy <alymohamad@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12,<3.13"
 fastapi = "^0.112.1"
 uvicorn = "^0.30.6"
 jinja2 = "^3.1.4"
@@ -17,7 +17,6 @@ python-multipart = "^0.0.9"
 pydantic = "^2.8.2"
 docx2pdf = "^0.1.8"
 mammoth = "^1.8.0"
-pypandoc-binary = "^1.13"
 docxtpl = "^0.18.0"
 
 

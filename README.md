@@ -4,7 +4,7 @@
 </p>
 
 ## Why another reporting generator tool?
-Papyrus is a simple reporting generator tool that allows you to create reports in a simple and easy way. It is designed to be used in a variety of scenarios, from generating simple reports to complex reports with multiple sections and sub-sections. Papyrus is designed to be easy to use and flexible, allowing you to create reports in a variety of formats, including HTML, Docs, PDF, and plain text.
+Papyrus is a simple reporting generator tool that allows you to create reports in a simple and easy way. It is designed to be used in a variety of scenarios, from generating simple reports to complex reports with multiple sections and sub-sections. Papyrus is designed to be easy to use and flexible, allowing you to create reports in a variety of formats, including HTML, Docx, PDF, and plain text.
 
 ## Name origin?
 A material prepared in ancient Egypt from the pithy stem of a water plant, used in sheets throughout the ancient Mediterranean world for writing or painting on and also for making articles such as rope.
@@ -14,12 +14,12 @@ A material prepared in ancient Egypt from the pithy stem of a water plant, used 
 - Flexible and customizable
 
 ## Supported conversions
-| From     | To   | Supported |
-|----------|------|-----------|
-| Docx     | Docx | ✅         |
-| HTML     | HTML | ✅         |
-| HTML | PDF  | ✅         |
-| Docx | PDF  | -         |
+| From | To   |  Supported  |
+|------|------|:-----------:|
+| Docx | Docx |      ✅      |
+| HTML | HTML |      ✅      |
+| HTML | PDF  |      ✅      |
+| Docx | PDF  |      ✅      |
 
 
 

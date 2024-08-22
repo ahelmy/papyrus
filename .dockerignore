@@ -1,0 +1,8 @@
+*
+!app/controllers
+!app/dtos
+!app/services
+!app/main.py
+!app/__init__.py
+!pyproject.toml
+!poetry.lock
