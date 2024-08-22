@@ -7,7 +7,6 @@ from jinja2 import Template
 from pathlib import Path
 from docxtpl import DocxTemplate
 from openpyxl import Workbook
-from xhtml2pdf import pisa
 
 TEMPLATES_DIR = Path("app/templates")
 OUTPUT_DIR = Path("app/outputs")
