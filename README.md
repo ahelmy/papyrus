@@ -72,7 +72,7 @@ curl -X POST "http://127.0.0.1:8000/upload-template/" \
 curl -X POST "http://127.0.0.1:8000/render-template/" \
 -H "Content-Type: application/json" \
 -d '{
-  "template_id": "test.docx",
+  "template_id": "test.html",
   "data": {
     "name": "John Doe",
     "date": "2024-08-20",
@@ -87,7 +87,7 @@ curl -X POST "http://127.0.0.1:8000/render-template/" \
       }
     ]
   },
-  "format": "docx"
+  "format": "html"
 }'
 ```
 
