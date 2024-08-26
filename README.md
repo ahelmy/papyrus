@@ -29,15 +29,44 @@ docker run -p 8000:8000 ahelmy0/papyrus:latest
 ```
 
 ## Usage
+### Placeholders
+Use HTML, Docx, or plain text to create your template. You can use the following placeholders to replace them with your data:
+- `{{name}}`
+- `{{date}}`
+- Nested placeholders:
+  - `{{address.city}}`
+- For loop:
+  - `{% for item in items %} {{item.name}} {% endfor %}` 
+- If condition:
+  - `{% if condition %} {{name}} {% endif %}`
+  - `{% if condition %} {{name}} {% else %} {{date}} {% endif %}`
 
-### Upload template
+Example:
+1. Create `test.html` file with the following content:
+```html
+<html>
+  <body>
+    <h1>Hello {{name}}</h1>
+    <h2>Date: {{date}}</h2>
+    <table style="border: 2px solid black;">
+        {% for item in list %}
+        <tr>
+            <td style="border: 2px solid black;">{{item.name}}</td>
+            <td style="border: 2px solid black;">{{item.age}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </body>
+</html>
 
+```
+2. Upload the template:
 ```bash
 curl -X POST "http://127.0.0.1:8000/upload-template/" \
 -F "file=@./test.html" 
 ```
 
-### Render template
+3. Render the template:
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/render-template/" \
@@ -47,6 +76,16 @@ curl -X POST "http://127.0.0.1:8000/render-template/" \
   "data": {
     "name": "John Doe",
     "date": "2024-08-20",
+    "items" : [
+      {
+        "name": "item1",
+        "age": 20
+      },
+      {
+        "name": "item2",
+        "age": 30
+      }
+    ]
   },
   "format": "docx"
 }'
